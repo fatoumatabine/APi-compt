@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y \
 # Activer mod_rewrite pour Laravel
 RUN a2enmod rewrite
 
+# Configurer Apache pour utiliser le port dynamique de Render
+RUN sed -i 's/Listen 80/Listen ${PORT}/' /etc/apache2/ports.conf
+
 # Définir le répertoire de travail
 WORKDIR /var/www/html
 
@@ -21,11 +24,13 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Copier le reste du code
 COPY . .
 
-# Exécuter les migrations de base de données et lier le stockage
-RUN php artisan migrate --force && php artisan storage:link
+# Lier le stockage
+RUN php artisan storage:link
 
-# Copier la configuration Apache personnalisée
+# Copier la configuration Apache personnalisée et le script de démarrage
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
 
 # Activer la nouvelle configuration du site et désactiver l'ancienne
 RUN a2dissite 000-default.conf && a2ensite 000-default.conf
@@ -35,8 +40,8 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 /var/www/html/storage \
     && chmod -R 775 /var/www/html/bootstrap/cache
 
-# Exposer le port 8080 (port par défaut pour Render)
-EXPOSE 8080
+# Exposer le port 80
+EXPOSE 80
 
 # Commande de démarrage
-CMD ["apache2-foreground"]
+CMD ["/usr/local/bin/start.sh"]
