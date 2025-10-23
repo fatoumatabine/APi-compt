@@ -11,7 +11,8 @@ RUN apt-get update && apt-get install -y \
 RUN a2enmod rewrite
 
 # Configurer Apache pour utiliser le port dynamique de Render
-RUN sed -i 's/Listen 80/Listen ${PORT}/' /etc/apache2/ports.conf
+RUN sed -i 's/Listen 80/Listen ${PORT}/' /etc/apache2/ports.conf \
+    && sed -i 's/*:80/*:${PORT}/' /etc/apache2/sites-available/000-default.conf
 
 # Définir le répertoire de travail
 WORKDIR /var/www/html
