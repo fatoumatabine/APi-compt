@@ -19,7 +19,7 @@ WORKDIR /var/www/html
 
 # Copier composer.json et composer.lock pour installer les dépendances
 COPY composer.json composer.lock ./
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+RUN wget -q https://getcomposer.org/composer.phar -O /usr/local/bin/composer && chmod +x /usr/local/bin/composer \
 && composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 
 # Copier le reste du code
