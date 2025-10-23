@@ -16,7 +16,11 @@ class CompteController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+    * @OA\Get(
+    *     path="/api/comptes",
+     *     summary="Liste des comptes",
+     *     @OA\Response(response="200", description="Liste des comptes")
+     * )
      */
     public function index()
     {
@@ -24,7 +28,11 @@ class CompteController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/comptes",
+     *     summary="Créer un compte",
+     *     @OA\Response(response="201", description="Compte créé")
+     * )
      */
     public function store(Request $request)
     {
@@ -39,7 +47,12 @@ class CompteController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/comptes/{id}",
+     *     summary="Détails d'un compte",
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response="200", description="Détails du compte")
+     * )
      */
     public function show(string $id)
     {
@@ -51,7 +64,12 @@ class CompteController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/comptes/{id}",
+     *     summary="Mettre à jour un compte",
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response="200", description="Compte mis à jour")
+     * )
      */
     public function update(Request $request, string $id)
     {
@@ -69,7 +87,12 @@ class CompteController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/comptes/{id}",
+     *     summary="Supprimer un compte",
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response="204", description="Compte supprimé")
+     * )
      */
     public function destroy(string $id)
     {

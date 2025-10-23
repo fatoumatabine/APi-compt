@@ -8,7 +8,11 @@ use Illuminate\Http\Request;
 class AdminController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/admins",
+     *     summary="Liste des admins",
+     *     @OA\Response(response="200", description="Liste des admins")
+     * )
      */
     public function index()
     {
@@ -16,7 +20,11 @@ class AdminController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/admins",
+     *     summary="Créer un admin",
+     *     @OA\Response(response="201", description="Admin créé")
+     * )
      */
     public function store(Request $request)
     {
@@ -24,7 +32,12 @@ class AdminController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/admins/{id}",
+     *     summary="Détails d'un admin",
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response="200", description="Détails de l'admin")
+     * )
      */
     public function show(string $id)
     {
@@ -32,7 +45,12 @@ class AdminController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/admins/{id}",
+     *     summary="Mettre à jour un admin",
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response="200", description="Admin mis à jour")
+     * )
      */
     public function update(Request $request, string $id)
     {
@@ -40,7 +58,12 @@ class AdminController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/admins/{id}",
+     *     summary="Supprimer un admin",
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response="204", description="Admin supprimé")
+     * )
      */
     public function destroy(string $id)
     {
