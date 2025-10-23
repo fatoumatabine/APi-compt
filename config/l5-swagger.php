@@ -1,11 +1,20 @@
 <?php
 
+/**
+ * @OA\Info(
+ *     title="API Gestion de Compte",
+ *     version="1.0",
+ *     description="API pour la gestion des comptes bancaires"
+ * )
+ */
+
 return [
     'default' => 'default',
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'L5 Swagger UI',
+                'title' => 'API Gestion de Compte',
+                'version' => '1.0',
             ],
 
             'routes' => [
@@ -45,6 +54,7 @@ return [
                  */
                 'annotations' => [
                     base_path('app'),
+                    base_path('app/Swagger'),
                 ],
             ],
         ],

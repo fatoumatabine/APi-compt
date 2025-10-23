@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @OA\Info(
+ *     title="API Gestion de Compte",
+ *     version="1.0",
+ *     description="API pour la gestion des comptes bancaires"
+ * )
+ */
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -11,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 | Here is where you can register API routes for your application. These
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "api" middleware group. Make something great!
-|
+|.
 */
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -19,10 +27,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('v1')->group(function () {
-    Route::post('register', [App\Http\Controllers\API\AuthController::class, 'register']);
-    Route::post('login', [App\Http\Controllers\API\AuthController::class, 'login']);
+    // Route::post('register', [App\Http\Controllers\API\AuthController::class, 'register']);
+    // Route::post('login', [App\Http\Controllers\API\AuthController::class, 'login']);
 
     Route::apiResource('comptes', App\Http\Controllers\API\CompteController::class);
+    Route::get('comptes/archived', [App\Http\Controllers\API\CompteController::class, 'archived']);
     Route::apiResource('clients', App\Http\Controllers\API\ClientController::class);
     Route::apiResource('admins', App\Http\Controllers\API\AdminController::class);
+    Route::apiResource('transactions', App\Http\Controllers\API\TransactionController::class);
+    Route::post('transactions/depot', [App\Http\Controllers\API\TransactionController::class, 'depot']);
+    Route::post('transactions/retrait', [App\Http\Controllers\API\TransactionController::class, 'retrait']);
 });

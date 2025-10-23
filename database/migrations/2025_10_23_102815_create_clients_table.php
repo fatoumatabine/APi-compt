@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('clients', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('nom');
             $table->string('prenom');
             $table->string('email')->unique();
@@ -20,6 +21,9 @@ return new class extends Migration
             $table->text('adresse')->nullable();
             $table->date('date_naissance')->nullable();
             $table->timestamps();
+
+            $table->index(['nom', 'prenom']);
+            $table->index('email');
         });
     }
 

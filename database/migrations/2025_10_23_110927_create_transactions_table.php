@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comptes', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('numero_compte')->unique();
-            $table->decimal('solde', 15, 2)->default(0);
-            $table->string('type_compte')->default('courant'); // courant, epargne, etc.
-            $table->foreignId('client_id')->constrained('clients')->onDelete('cascade');
+            $table->foreignId('compte_id')->constrained('comptes')->onDelete('cascade');
+            $table->enum('type', ['depot', 'retrait']);
+            $table->decimal('montant', 15, 2);
+            $table->text('description')->nullable();
+            $table->timestamp('date_transaction')->useCurrent();
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comptes');
+        Schema::dropIfExists('transactions');
     }
 };
