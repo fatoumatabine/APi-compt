@@ -2,9 +2,10 @@ FROM php:8.2-apache
 
 # Installer les dépendances système et extensions PHP
 RUN apt-get update && apt-get install -y \
-    libpq-dev \
-    git \
-    unzip \
+libpq-dev \
+git \
+unzip \
+wget \
     && docker-php-ext-install pdo pdo_pgsql
 
 # Activer mod_rewrite pour Laravel
