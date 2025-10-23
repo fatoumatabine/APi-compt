@@ -1,0 +1,253 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Gestion de Comptes",
+        "description": "API pour la gestion des comptes bancaires",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api",
+            "description": "Serveur local"
+        }
+    ],
+    "paths": {
+        "/api/admins": {
+            "get": {
+                "summary": "Liste des admins",
+                "operationId": "45cf7c9bb4cf6eb214c60fef7fdb7415",
+                "responses": {
+                    "200": {
+                        "description": "Liste des admins"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Créer un admin",
+                "operationId": "e570d09f6ad7a98f75802769098516d8",
+                "responses": {
+                    "201": {
+                        "description": "Admin créé"
+                    }
+                }
+            }
+        },
+        "/api/admins/{id}": {
+            "get": {
+                "summary": "Détails d'un admin",
+                "operationId": "f1f2fa5a79c9296883e1b72785a902b2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails de l'admin"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Mettre à jour un admin",
+                "operationId": "6c385d21d0099660b877b49aafa19dbc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Admin mis à jour"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Supprimer un admin",
+                "operationId": "25b48aaf188d356b01464c7adabe3acf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Admin supprimé"
+                    }
+                }
+            }
+        },
+        "/api/clients": {
+            "get": {
+                "summary": "Liste des clients",
+                "operationId": "41703880c20e3df26410ab0223f7aea9",
+                "responses": {
+                    "200": {
+                        "description": "Liste des clients"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Créer un client",
+                "operationId": "c87d60bc6aab711a1ec62849114b86b1",
+                "responses": {
+                    "201": {
+                        "description": "Client créé"
+                    }
+                }
+            }
+        },
+        "/api/clients/{id}": {
+            "get": {
+                "summary": "Détails d'un client",
+                "operationId": "d917069070f7a8f678433833942c4b9f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails du client"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Mettre à jour un client",
+                "operationId": "a783da8ce59ae48409d56eb4a7729c12",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Client mis à jour"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Supprimer un client",
+                "operationId": "7de8c22f4e3207bcf67127aea4b839de",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Client supprimé"
+                    }
+                }
+            }
+        },
+        "/api/comptes": {
+            "get": {
+                "summary": "Liste des comptes",
+                "operationId": "d779ab09878f45a91fb37157ebf4ba12",
+                "responses": {
+                    "200": {
+                        "description": "Liste des comptes"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Créer un compte",
+                "operationId": "44f4c40bd1fda649aac38e8edd78878b",
+                "responses": {
+                    "201": {
+                        "description": "Compte créé"
+                    }
+                }
+            }
+        },
+        "/api/comptes/{id}": {
+            "get": {
+                "summary": "Détails d'un compte",
+                "operationId": "5816c36e0c41bb25ae8eea34fca8510f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails du compte"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Mettre à jour un compte",
+                "operationId": "7e6298af907bf9386614a0fdb628215c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Compte mis à jour"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Supprimer un compte",
+                "operationId": "fc866dd95df50ced14640d7d3cb91852",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Compte supprimé"
+                    }
+                }
+            }
+        }
+    }
+}
