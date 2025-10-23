@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "8000:80"
+    environment:
+      - APP_ENV=local
+      - APP_KEY=base64:FOJ09Q3Xhpb39ZybJjQk5/hvTl2RtRxClgp1QYseH+o=
+      - APP_DEBUG=true
+      - DB_CONNECTION=pgsql
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=api_compt
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=password
+  db:
+    image: postgres:17
+    environment:
+      - POSTGRES_DB=api_compt
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
