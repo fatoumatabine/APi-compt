@@ -13,6 +13,7 @@ return [
                  * Route for accessing api documentation interface
                  */
                 'api' => 'api/documentation',
+                 'docs' => 'docs/api-docs.json',
             ],
             'paths' => [
                 /*
@@ -44,7 +45,8 @@ return [
                  * Absolute paths to directory containing the swagger annotations are stored.
                  */
                 'annotations' => [
-                    base_path('app'),
+                base_path('app'),
+                    base_path('routes'),
                 ],
             ],
         ],

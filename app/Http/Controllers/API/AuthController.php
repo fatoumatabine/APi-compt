@@ -1,7 +1,16 @@
-/**
- * @OA\Info(title="API Gestion de Compte", version="1.0")
- */
 
+
+/**
+ * @OA\Info(
+ *     title="API Gestion de Comptes",
+ *     version="1.0",
+ *     description="API pour la gestion des comptes bancaires"
+ * )
+ * @OA\Server(
+ *     url="http://localhost:8000/api",
+ *     description="Serveur local"
+ * )
+ */
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
@@ -9,9 +18,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-/**
- * @OA\Tag(name="Auth", description="Authentication endpoints")
- */
 class AuthController extends Controller
 {
     /**
@@ -56,6 +62,28 @@ class AuthController extends Controller
         return response()->json(['token' => $token], 201);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/login",
+     *     tags={"Auth"},
+     *     summary="Login user",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email","password"},
+     *             @OA\Property(property="email", type="string", format="email"),
+     *             @OA\Property(property="password", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="User logged in",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="token", type="string")
+     *         )
+     *     )
+     * )
+     */
     public function login(Request $request)
     {
         $request->validate([
