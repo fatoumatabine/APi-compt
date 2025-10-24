@@ -1,8 +1,10 @@
 #!/bin/sh
 
 # Configurer Apache pour le port dynamique
+echo "Configuring Apache for port $PORT"
 sed -i "s/\${PORT}/$PORT/g" /etc/apache2/ports.conf
 sed -i "s/\${PORT}/$PORT/g" /etc/apache2/sites-available/000-default.conf
+echo "Ports configured"
 
 # Attendre que la base de données soit prête
 echo "Waiting for database to be ready..."
