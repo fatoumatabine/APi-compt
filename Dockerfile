@@ -81,9 +81,7 @@ COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Copier la configuration Apache
-RUN a2dissite 000-default.conf || true
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
-RUN a2ensite 000-default.conf
 
 # Exposer le port 80
 EXPOSE 80
