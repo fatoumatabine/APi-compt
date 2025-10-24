@@ -10,11 +10,12 @@ COPY composer.json composer.lock ./
 RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
 
 # Étape 2: Image finale pour l'application
-FROM php:8.3-fpm-alpine
+FROM php:8.3-apache-alpine
 
 # Installer les extensions PHP nécessaires
 RUN apk add --no-cache postgresql-dev \
-    && docker-php-ext-install pdo pdo_pgsql
+    && docker-php-ext-install pdo pdo_pgsql \
+    && a2enmod rewrite
 
 # Créer un utilisateur non-root
 RUN addgroup -g 1000 laravel && adduser -G laravel -g laravel -s /bin/sh -D laravel
@@ -60,22 +61,26 @@ RUN echo "APP_NAME=Laravel" > .env && \
 RUN chown laravel:laravel .env
 
 # Générer la clé d'application et optimiser
+# Générer la clé d'application et optimiser
 USER laravel
 RUN php artisan key:generate --force && \
     php artisan config:cache && \
     php artisan route:cache && \
-    php artisan view:cache
+    php artisan view:cache && \
+    php artisan l5-swagger:generate && \
+    chmod -R 775 storage/api-docs
 USER root
 
 # Copier le script d'entrée
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Passer à l'utilisateur non-root
-USER laravel
+# Copier la configuration Apache
+COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
+RUN a2ensite 000-default.conf
 
-# Exposer le port 8000
-EXPOSE 8000
+# Exposer le port 80
+EXPOSE 80
 
 # Commande par défaut
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+CMD ["apache2-foreground"]

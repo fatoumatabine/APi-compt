@@ -10,5 +10,5 @@ done
 echo "Database is up - executing migrations"
 php artisan migrate --force
 
-echo "Starting Laravel application..."
-exec "$@"
+echo "Starting Apache..."
+exec apache2-foreground

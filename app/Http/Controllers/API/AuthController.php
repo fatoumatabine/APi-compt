@@ -8,29 +8,6 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    /**
-     * @OA\Post(
-     *     path="/api/v1/register",
-     *     tags={"Auth"},
-     *     summary="Register a new user",
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             required={"name","email","password"},
-     *             @OA\Property(property="name", type="string"),
-     *             @OA\Property(property="email", type="string", format="email"),
-     *             @OA\Property(property="password", type="string", minLength=6)
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="User registered",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="token", type="string")
-     *         )
-     *     )
-     * )
-     */
     public function register(Request $request)
     {
         $request->validate([
@@ -50,28 +27,6 @@ class AuthController extends Controller
         return response()->json(['token' => $token], 201);
     }
 
-    /**
-     * @OA\Post(
-     *     path="/api/v1/login",
-     *     tags={"Auth"},
-     *     summary="Login user",
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             required={"email","password"},
-     *             @OA\Property(property="email", type="string", format="email"),
-     *             @OA\Property(property="password", type="string")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="User logged in",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="token", type="string")
-     *         )
-     *     )
-     * )
-     */
     public function login(Request $request)
     {
         $request->validate([
