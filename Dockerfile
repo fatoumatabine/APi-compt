@@ -71,7 +71,8 @@ RUN php artisan key:generate --force && \
     php artisan route:cache && \
     php artisan view:cache && \
     php artisan l5-swagger:generate && \
-    chmod -R 775 storage/api-docs
+    chmod -R 775 storage/api-docs && \
+    ln -s /var/www/html/storage/api-docs /var/www/html/public/docs
 USER root
 
 # Copier le script d'entrée
