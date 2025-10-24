@@ -10,6 +10,9 @@ done
 echo "Database is up - executing migrations"
 php artisan migrate --force
 
+echo "Publishing Swagger assets..."
+php artisan l5-swagger:publish-assets
+
 echo "Generating Swagger documentation..."
 php artisan l5-swagger:generate
 
