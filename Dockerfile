@@ -10,7 +10,7 @@ COPY composer.json composer.lock ./
 RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
 
 # Étape 2: Image finale pour l'application
-FROM php:8.3-apache-alpine
+FROM php:8.3-apache
 
 # Installer les extensions PHP nécessaires
 RUN apk add --no-cache postgresql-dev \
