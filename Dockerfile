@@ -1,49 +1,81 @@
-FROM php:8.2-apache
+# Étape 1: Build des dépendances PHP
+FROM composer:2.6 AS composer-build
 
-# Installer les dépendances système et extensions PHP
-RUN apt-get update && apt-get install -y \
-libpq-dev \
-git \
-unzip \
-wget \
+WORKDIR /app
+
+# Copier les fichiers de dépendances
+COPY composer.json composer.lock ./
+
+# Installer les dépendances PHP sans scripts post-install
+RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
+
+# Étape 2: Image finale pour l'application
+FROM php:8.3-fpm-alpine
+
+# Installer les extensions PHP nécessaires
+RUN apk add --no-cache postgresql-dev \
     && docker-php-ext-install pdo pdo_pgsql
 
-# Activer mod_rewrite pour Laravel
-RUN a2enmod rewrite
-
-# Configurer Apache pour utiliser le port dynamique de Render
-RUN sed -i 's/Listen 80/Listen ${PORT}/' /etc/apache2/ports.conf \
-    && sed -i 's/*:80/*:${PORT}/' /etc/apache2/sites-available/000-default.conf
+# Créer un utilisateur non-root
+RUN addgroup -g 1000 laravel && adduser -G laravel -g laravel -s /bin/sh -D laravel
 
 # Définir le répertoire de travail
 WORKDIR /var/www/html
 
-# Copier composer.json et composer.lock pour installer les dépendances
-COPY composer.json composer.lock ./
-RUN wget -q https://getcomposer.org/composer.phar -O /usr/local/bin/composer && chmod +x /usr/local/bin/composer \
-&& composer install --no-dev --optimize-autoloader --ignore-platform-reqs
+# Copier les dépendances installées depuis l'étape de build
+COPY --from=composer-build /app/vendor ./vendor
 
-# Copier le reste du code
+# Copier le reste du code de l'application
 COPY . .
 
-# Lier le stockage
-RUN php artisan storage:link
+# Créer les répertoires nécessaires et définir les permissions
+RUN mkdir -p storage/framework/{cache,data,sessions,testing,views} \
+    && mkdir -p storage/logs \
+    && mkdir -p bootstrap/cache \
+    && chown -R laravel:laravel /var/www/html \
+    && chmod -R 775 storage bootstrap/cache
 
-# Copier la configuration Apache personnalisée et le script de démarrage
-COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
-COPY start.sh /usr/local/bin/start.sh
-RUN chmod +x /usr/local/bin/start.sh
+# Créer un fichier .env minimal pour le build
+RUN echo "APP_NAME=Laravel" > .env && \
+    echo "APP_ENV=production" >> .env && \
+    echo "APP_KEY=" >> .env && \
+    echo "APP_DEBUG=false" >> .env && \
+    echo "APP_URL=http://localhost" >> .env && \
+    echo "" >> .env && \
+    echo "LOG_CHANNEL=stack" >> .env && \
+    echo "LOG_LEVEL=error" >> .env && \
+    echo "" >> .env && \
+    echo "DB_CONNECTION=pgsql" >> .env && \
+    echo "DB_HOST=\${DB_HOST}" >> .env && \
+    echo "DB_PORT=\${DB_PORT}" >> .env && \
+    echo "DB_DATABASE=\${DB_DATABASE}" >> .env && \
+    echo "DB_USERNAME=\${DB_USERNAME}" >> .env && \
+    echo "DB_PASSWORD=\${DB_PASSWORD}" >> .env && \
+    echo "" >> .env && \
+    echo "CACHE_DRIVER=file" >> .env && \
+    echo "SESSION_DRIVER=file" >> .env && \
+    echo "QUEUE_CONNECTION=sync" >> .env
 
-# Activer la nouvelle configuration du site et désactiver l'ancienne
-RUN a2dissite 000-default.conf && a2ensite 000-default.conf
+# Changer les permissions du fichier .env pour l'utilisateur laravel
+RUN chown laravel:laravel .env
 
-# Définir les permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 /var/www/html/storage \
-    && chmod -R 775 /var/www/html/bootstrap/cache
+# Générer la clé d'application et optimiser
+USER laravel
+RUN php artisan key:generate --force && \
+    php artisan config:cache && \
+    php artisan route:cache && \
+    php artisan view:cache
+USER root
 
-# Exposer le port 80
-EXPOSE 80
+# Copier le script d'entrée
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Commande de démarrage
-CMD ["/usr/local/bin/start.sh"]
+# Passer à l'utilisateur non-root
+USER laravel
+
+# Exposer le port 8000
+EXPOSE 8000
+
+# Commande par défaut
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]

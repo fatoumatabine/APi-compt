@@ -30,8 +30,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('v1')->group(function () {
-    Route::post('register', [App\Http\Controllers\API\AuthController::class, 'register']);
-    Route::post('login', [App\Http\Controllers\API\AuthController::class, 'login']);
+    // Route::post('register', [App\Http\Controllers\API\AuthController::class, 'register']);
+    // Route::post('login', [App\Http\Controllers\API\AuthController::class, 'login']);
 
     Route::apiResource('comptes', App\Http\Controllers\API\CompteController::class);
     Route::apiResource('clients', App\Http\Controllers\API\ClientController::class);
