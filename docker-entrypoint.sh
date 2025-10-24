@@ -8,7 +8,7 @@ echo "Ports configured"
 
 # Attendre que la base de données soit prête
 echo "Waiting for database to be ready..."
-while ! pg_isready -h $DB_HOST -p $DB_PORT -U $DB_USERNAME; do
+while ! pg_isready -h $DB_HOST -p $DB_PORT; do
   echo "Database is unavailable - sleeping"
   sleep 1
 done
