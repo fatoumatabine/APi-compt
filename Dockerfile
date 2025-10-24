@@ -21,7 +21,7 @@ libpq-dev \
     && sed -i 's/*:80/*:${PORT}/' /etc/apache2/sites-available/000-default.conf
 
 # Créer un utilisateur non-root
-RUN addgroup -g 1000 laravel && adduser -G laravel -g laravel -s /bin/sh -D laravel
+RUN groupadd -g 1000 laravel && useradd -u 1000 -g laravel -s /bin/bash -m laravel
 
 # Définir le répertoire de travail
 WORKDIR /var/www/html
