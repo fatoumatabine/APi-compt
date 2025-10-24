@@ -15,9 +15,10 @@ FROM php:8.3-apache
 # Installer les extensions PHP nécessaires
 RUN apt-get update && apt-get install -y \
 libpq-dev \
+postgresql-client \
 && docker-php-ext-install pdo pdo_pgsql \
-    && a2enmod rewrite \
-    && sed -i 's/Listen 80/Listen ${PORT}/' /etc/apache2/ports.conf \
+&& a2enmod rewrite \
+&& sed -i 's/Listen 80/Listen ${PORT}/' /etc/apache2/ports.conf \
     && sed -i 's/*:80/*:${PORT}/' /etc/apache2/sites-available/000-default.conf
 
 # Créer un utilisateur non-root
@@ -86,5 +87,6 @@ RUN a2ensite 000-default.conf
 # Exposer le port 80
 EXPOSE 80
 
-# Commande par défaut
+# Point d'entrée et commande par défaut
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["apache2-foreground"]
