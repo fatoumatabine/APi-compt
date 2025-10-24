@@ -7,7 +7,7 @@ WORKDIR /app
 COPY composer.json composer.lock ./
 
 # Installer les dépendances PHP sans scripts post-install
-RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
+RUN composer install --optimize-autoloader --no-interaction --prefer-dist --no-scripts
 
 # Étape 2: Image finale pour l'application
 FROM php:8.3-fpm-alpine
@@ -27,6 +27,9 @@ COPY --from=composer-build /app/vendor ./vendor
 
 # Copier le reste du code de l'application
 COPY . .
+
+# Copier les assets Swagger
+RUN mkdir -p public/docs/asset && cp -r vendor/swagger-api/swagger-ui/dist/* public/docs/asset/
 
 # Créer les répertoires nécessaires et définir les permissions
 RUN mkdir -p storage/framework/{cache,data,sessions,testing,views} \
